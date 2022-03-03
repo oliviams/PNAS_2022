@@ -7,6 +7,7 @@ strategies = ['TFT', 'TF2T', 'COP', 'DEF', 'HTFT', 'ALT',
               '2TFT', 'BU', 'CCD', 'CCCD', 'DDC', 'DES',
               'FBF', 'HL', 'WL', 'UC', 'UD']
 
+# Categorisation from playing Axelrod tournaments
 strat_cat = {'TFT': ['-', '-', '-', 'abab', '-', 'abab', '-', 'aabb', 'abab', 'abab', 'aabb', 'aabb', '-', 'abab', '-', '-', 'aabb'],
              'TF2T': ['-', '-', '-', 'abab', '-', 'aaa', '-', 'aaabb', 'aaa', 'aaa', 'aab', 'aaabb', '-', 'aaa', '-', '-', 'abab'],
              'COP': ['-', '-', '-', 'aaa', '-', 'aaa', '-', 'aaa', 'aaa', 'aaa', 'aaa', 'aaa', '-', 'aaa', '-', '-', 'aaa'],
@@ -28,17 +29,19 @@ strat_cat = {'TFT': ['-', '-', '-', 'abab', '-', 'abab', '-', 'aabb', 'abab', 'a
 strat_df = pd.DataFrame(strat_cat)
 strat_df.index = strategies
 
+# Calculating proportion of 'a'
 for col in strat_df:
     for i, row_value in strat_df[col].iteritems():
         if row_value == '-':
             pass
         else:
-            strat_df[col][i] = row_value.count('a')/len(row_value)
+            strat_df[col][i] = row_value.count('a')/(row_value.count('a')+row_value.count('b'))
 
 strat_df = strat_df.replace('-', np.nan)
 strat_np = strat_df.to_numpy()
 axis_labels = strategies
 
+# Visualisation of categorisation
 plt.figure(figsize=(12, 9))
 sns.heatmap(strat_np, cmap='coolwarm', xticklabels=strategies, yticklabels=strategies)
 plt.show()
